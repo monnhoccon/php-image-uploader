@@ -7,8 +7,6 @@ Support
 * Upload to your account 
 * Use API for upload faster
 
-Example:
-
 ### Imgur & Imageshack same:
 
 	$ob = Ptc_Image_Uploader::factory('Imgur');
