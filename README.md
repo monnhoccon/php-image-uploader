@@ -11,6 +11,7 @@ Example:
 
 Imgur & Imageshack same:
 -----
+
 	$ob = Ptc_Image_Uploader::factory('Imgur');
 	$ob->setApi('your api here');
 	$url = $ob->upload('real file path.jpg');	
@@ -18,6 +19,7 @@ Imgur & Imageshack same:
 
 Picasa:	
 ------
+
 	$ob = Ptc_Image_Uploader::factory('Picasa');
 	$ob->login('your email', 'your password');
 	$ob->setAlbumId(array('albumId 1', 'albumId 2'));
