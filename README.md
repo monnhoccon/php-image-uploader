@@ -9,16 +9,14 @@ Support
 
 Example:
 
-Imgur & Imageshack same:
--------
+### Imgur & Imageshack same:
 
 	$ob = Ptc_Image_Uploader::factory('Imgur');
 	$ob->setApi('your api here');
 	$url = $ob->upload('real file path.jpg');	
 	echo $url
 
-Picasa:	
--------
+### Picasa:	
 
 	$ob = Ptc_Image_Uploader::factory('Picasa');
 	$ob->login('your email', 'your password');
