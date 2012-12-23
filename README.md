@@ -10,7 +10,7 @@ Support
 Example:
 
 Imgur & Imageshack same:
------
+-------
 
 	$ob = Ptc_Image_Uploader::factory('Imgur');
 	$ob->setApi('your api here');
@@ -18,7 +18,7 @@ Imgur & Imageshack same:
 	echo $url
 
 Picasa:	
-------
+-------
 
 	$ob = Ptc_Image_Uploader::factory('Picasa');
 	$ob->login('your email', 'your password');
