@@ -60,7 +60,7 @@ abstract class Ptc_Image_Uploader
 	/** 
 	 * @return	Ptc_Image_Uploader
 	*/
-	public function factory($pluginName, $pluginDir = NULL)
+	public static function factory($pluginName, $pluginDir = NULL)
 	{
 		$pluginName = ucfirst($pluginName);
 		if($pluginDir !== NULL) {
