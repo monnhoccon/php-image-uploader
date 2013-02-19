@@ -5,13 +5,15 @@
  * or upload file to server. It using two functions: curl and fsockopen
  *
  * @name		Ptc_Http
- * @version	 	2.3.2
+ * @version	 	2.3.4
  * @license		free
  * @author 		Phan Thanh Cong <chiplove.9xpro at gmail dot com>
 *  @copyright	chiplove.9xpro
 */ 
 
 /**
+ Ver 2.3.4 (Feb 20, 2013)
+ + Parser header fixed (wrong typing)
  
  Ver 2.3.3 (Nov 5, 2012)
  + Re-struct, something edited
@@ -747,6 +749,7 @@ class Ptc_Http
 				$pos = 0;
 				$len = strlen($data);
 				$outData = '';
+				
 				while ($pos < $len)  {
 					$rawnum = substr($data, $pos, strpos(substr($data, $pos), "\r\n") + 2);
 					$num = hexdec(trim($rawnum));
@@ -758,6 +761,8 @@ class Ptc_Http
 				$responseBody = $outData;
 			}
 			$this->_responseText = rtrim($responseBody);
+			echo '"'.$this->_responseText.'"';
+			exit;
 			fclose($filePointer);
 		}
 		
@@ -784,7 +789,7 @@ class Ptc_Http
 				}
 				else if(strpos($line, ':')) {
 					list($key, $value) = explode(':', $line);
-					$value = rtrim($value);
+					$value = ltrim($value);
 					$key = strtolower($key);
 					//parse cookie
 					if($key == 'set-cookie') {
