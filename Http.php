@@ -760,9 +760,7 @@ class Ptc_Http
 				}
 				$responseBody = $outData;
 			}
-			$this->_responseText = rtrim($responseBody);
-			echo '"'.$this->_responseText.'"';
-			exit;
+			$this->_responseText = ($responseBody); //ltrim
 			fclose($filePointer);
 		}
 		
