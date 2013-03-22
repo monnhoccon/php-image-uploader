@@ -786,7 +786,7 @@ class Ptc_Http
 					$this->_responseHeaders['status'] = $line;
 				}
 				else if(strpos($line, ':')) {
-					list($key, $value) = explode(':', $line);
+					list($key, $value) = explode(':', $line, 2);
 					$value = ltrim($value);
 					$key = strtolower($key);
 					//parse cookie
