@@ -582,6 +582,9 @@ class Ptc_Http
             $this->host = $urlParsed['host'];
             $this->port = ($this->port != 0) ? $this->port : 80;
         }
+		if( ! empty($urlParsed['port'])) {
+			$this->port = $urlParsed['port'];
+		}
         $this->path   = (isset($urlParsed['path']) ? $urlParsed['path'] : '/') . (isset($urlParsed['query']) ? '?' . $urlParsed['query'] : '');
         $this->schema = $urlParsed['scheme'];
 		
