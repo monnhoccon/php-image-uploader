@@ -43,9 +43,18 @@ class Ptc_Image_Uploader_Picasa extends Ptc_Image_Uploader
 			));
 			$this->http->execute('https://www.google.com/accounts/ClientLogin', 'POST');
 			
-			preg_match("/Auth=([a-z0-9_\-]+)/i", $this->http->getResponseText(), $match);
-			$cookie = $match[1];
-			
+			if(!empty($this->http->errors)) {
+				throw new Exception(__METHOD__.': Login falied. ' . implode('. ', $this->http->errors));
+			}
+			$cookie = '';
+			if(preg_match("/Auth=([a-z0-9_\-]+)/i", $this->http->getResponseText(), $match))
+			{
+				$cookie = $match[1];
+			}
+			else
+			{
+				throw new Exception(__METHOD__.': Login falied.' . $this->http->getResponseText());
+			}
 			if($cookie == '') {
 				$this->session('login' . $this->_username, NULL);
 				throw new Exception(__METHOD__.': Login falied. Please check your username/password again.');
@@ -161,7 +170,7 @@ class Ptc_Image_Uploader_Picasa extends Ptc_Image_Uploader
 		$this->_checkPermission(__METHOD__);
 		
 		if( ! $this->_albumId) {
-			$this->errors[] = 'Missing albumId to uploading';
+			$this->errors[] = 'Missing albumId to upload';
 			return false;
 		}
 		
@@ -190,11 +199,10 @@ class Ptc_Image_Uploader_Picasa extends Ptc_Image_Uploader
 		if($this->http->getResponseStatus() != 201) { //201  Created 
 			return FALSE;
 		}
-		
 		preg_match('#<gphoto:width>(\d+)</gphoto:width>#', $result, $match);
 		$width = $match[1];
 		preg_match('#<gphoto:height>(\d+)</gphoto:height>#', $result, $match);
-		$width = $match[1];
+		$height = $match[1];
 		preg_match('#src=\'([^\'"]+)\'#', $result, $match);
 		$url = $match[1];
 		

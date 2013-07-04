@@ -50,7 +50,7 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 	protected function _doLogin()
 	{
 		if( ! $this->session('login' . $this->_username)) {
-			$this->http->clear();
+			$this->http->reset();
 			
 			$this->http->execute('http://imageshack.us/auth.php', 'POST', array(
 				'username'			=> $this->_username,
@@ -69,7 +69,7 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 				$this->session('login' . $this->_username, NULL);
 				throw new Exception(__METHOD__.': Login falied. Please check your username/password again.');
 			}
-			$this->http->clear();
+			$this->http->reset();
 		}
 		$this->session('loginCookie', $this->session('login' . $this->_username));
 		
@@ -106,11 +106,12 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 	protected function _doUpload($filePath)
 	{			
 		if(empty($this->_apiKey)) {
-			$target	= 'http://imageshack.us/';
+			$apiKey = '';
+			$target	= 'http://post.imageshack.us/';
 			// is guest
-			if( ! $this->session('loginCookie')) {
+			/*if( ! $this->session('loginCookie')) {
 				$apiKey	= $this->_getFreeApiKey();
-			}
+			}*/
 		}
 		else {
 			$target = 'http://www.imageshack.us/upload_api.php';
@@ -122,6 +123,7 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 		$this->http->setCookie($this->session('loginCookie'));
 		$this->http->setParam(array(
 			'fileupload' 	=> '@' . $filePath, 
+			'uploadtype' 	=> 'on',
 			'xml' 			=> 'yes', 
 			'key'			=> $apiKey,
 		));
@@ -130,6 +132,12 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 		$this->_parseXML();
 		
 		if( ! isset($this->_images['image_link'])) {
+			if(isset($this->_images['error'])) {
+				throw new Exception(__METHOD__.': ' . $this->_images['error']);
+			}
+			else {
+				throw new Exception(__METHOD__.': ' . $this->http->getResponseText());
+			}
 			return FALSE;
 		}
 		return $this->_images['image_link'];
@@ -144,11 +152,12 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 	protected function _doTransload($imageUrl)
 	{
 		if(empty($this->_apiKey)) {
+			$apiKey = '';
 			$target = 'http://post.imageshack.us/transload.php';
 			// is guest
-			if( ! $this->session('loginCookie')) {
+			/*if( ! $this->session('loginCookie')) {
 				$apiKey	= $this->_getFreeApiKey();
-			}
+			}*/
 		}
 		else {
 			$target = 'http://www.imageshack.us/upload_api.php';
@@ -168,6 +177,12 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 		$this->_parseXML();
 		
 		if( ! isset($this->_images['image_link'])) {
+			if(isset($this->_images['error'])) {
+				throw new Exception(__METHOD__.': ' . $this->_images['error']);
+			}
+			else {
+				throw new Exception(__METHOD__.': ' . $this->http->getResponseText());
+			}
 			return FALSE;
 		}
 		return $this->_images['image_link'];
@@ -193,7 +208,7 @@ class Ptc_Image_Uploader_Imageshack extends Ptc_Image_Uploader
 	private function _parseXML()
 	{
 		$this->_images = array();
-		preg_match_all('#<([\w_][^>]+)>([^<]+?)</([\w_][^>]+)>#', $this->http->getResponseText(), $matches, PREG_SET_ORDER);
+		preg_match_all('#<([\w_]+)[^>]*?>([^<]+?)</([\w_][^>]+)>#', $this->http->getResponseText(), $matches, PREG_SET_ORDER);
 		foreach($matches as $match)
 		{
 			$this->_images[$match[1]] = $match[2];
