@@ -3,11 +3,11 @@ This project mainly help to upload an image to some services like Picasa, Images
 * Author: Phan Thanh Cong 
 * Contact: ptcong90@gmail.com
 * Copyright: (c) 2010 chiplove.9xpro
-* Version: 2.0
+* Version: 4.0
 
 ***
 ## Change Logs
-#### Version 2.0: Jul 25, 2013
+#### Version 4.0: Jul 25, 2013
 * Use namespace
 * Rewrite all plugins to clear 
 
