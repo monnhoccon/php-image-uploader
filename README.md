@@ -56,7 +56,7 @@ To create new AlbumId faster, you may use echo `$uploader->addAlbum('testing 1')
 ### Upload to Local server
     // This plugin to upload file that was submited from client
     $uploader = \ChipVN\Image_Uploader::factory();
-    echo $uploader->upload($_FILES['uploadfile']);
+    echo $uploader->upload($_FILES['uploadfile'], $destination);
 
 ***
 The end
