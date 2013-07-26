@@ -2,14 +2,16 @@
 This project mainly help to upload an image to some services like Picasa, Imageshack, Imgur or something (just a plugin)
 * Author: Phan Thanh Cong 
 * Contact: ptcong90@gmail.com
-* Copyright: (c) 2011 chiplove.9xpro
+* Copyright: (c) 2010 chiplove.9xpro
 * Version: 2.0
 
 ***
 ## Change Logs
-### Version 2.0: Jul 25, 2013
+#### Version 2.0: Jul 25, 2013
 * Use namespace
 * Rewrite all plugins to clear 
+#### Version 1.0: June 17, 2010
+* Upload image to Imageshack, Picasa
 
 ***
 ## Features
