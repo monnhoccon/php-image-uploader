@@ -29,7 +29,7 @@ class Image_Uploader
         
         // load remote
 		if(strpos($pluginName, 'Remote') === 0 AND !class_exists('\ChipVN\Image_Uploader\Remote')) {
-            Loader::load($className = __CLASS__ . '\Remote');	
+            Loader::load(__CLASS__ . '\Remote');	
         }
 		$className = __CLASS__ . '\\' . $pluginName;
         Loader::load($className);	
