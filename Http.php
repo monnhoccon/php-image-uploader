@@ -4,64 +4,68 @@
  * This class is fake a browser, you can using it for read web content 
  * or upload file to server. It using two functions: curl and fsockopen
  *
- * @name		Ptc_Http
- * @version	 	2.3.4
- * @license		free
- * @author 		Phan Thanh Cong <chiplove.9xpro at gmail dot com>
-*  @copyright	chiplove.9xpro
+ * @package		ChipVN
+ * @author		Phan Thanh Cong <ptcong90 at gmail dot com>
+ * @copright	chiplove.9xpro aka ptcong90
+ * @version	 	2.4
+ * @since       Jul 25, 2013
 */ 
 
 /**
- Ver 2.3.4 (Feb 20, 2013)
- + Parser header fixed (wrong typing)
- 
- Ver 2.3.3 (Nov 5, 2012)
- + Re-struct, something edited
- 
- Ver 2.3.2: (June 12, 2012)
- + Add some functions, something edited
- 
- Ver 2.3.1: (Mar 30, 2012)
- + Fixed some know bugs (php 5.3)
- 
- Ver 2.3: (Feb 2, 2012)
- + Update for picasa API
- 
- Ver 2.2: (Jan 1, 2012)
- + Add RawPost var to post request (upload image to picasa)
- + Shortcut request C_Http::request()
- 
- Ver 2.1: (Dec 23, 2011)
- + Fixed some bugs
- 
- Ver 2.0: (Jun 26, 2011)
- + Rewrite class to easy use
- + Fixed some bugs
- 
- Ver 1.2: (April 19, 2011)
- + Mime-type bug on upload file fixed 
- 
- Ver 1.1:
- + Upload multi file
- + Fixed some bugs
- 
- Ver 1.0:
- + Cookie
- + Referer
- + Proxy (only useCurl)
- + Server authentication
- + Upload file
+ * Ver 2.4
+ * + Use namespace
+ * + Change two static class methods (readBinary, mimeTye) to protected instance method
+ * 
+ * Ver 2.3.4 (Feb 20, 2013)
+ * + Parser header fixed (wrong typing)
+ * 
+ * Ver 2.3.3 (Nov 5, 2012)
+ * + Re-struct, something edited
+ * 
+ * Ver 2.3.2: (June 12, 2012)
+ * + Add some functions, something edited
+ * 
+ * Ver 2.3.1: (Mar 30, 2012)
+ * + Fixed some know bugs (php 5.3)
+ * 
+ * Ver 2.3: (Feb 2, 2012)
+ * + Update for picasa API
+ * 
+ * Ver 2.2: (Jan 1, 2012)
+ * + Add RawPost var to post request (upload image to picasa)
+ * + Shortcut request \ChipVN\Http::request()
+ * 
+ * Ver 2.1: (Dec 23, 2011)
+ * + Fixed some bugs
+ * 
+ * Ver 2.0: (Jun 26, 2011)
+ * + Rewrite class to easy use
+ * + Fixed some bugs
+ * 
+ * Ver 1.2: (April 19, 2011)
+ * + Mime-type bug on upload file fixed 
+ * 
+ * Ver 1.1:
+ * + Upload multi file
+ * + Fixed some bugs
+ * 
+ * Ver 1.0:
+ * + Cookie
+ * + Referer
+ * + Proxy (only useCurl)
+ * + Server authentication
+ * + Upload file
  
  Example:
  	Read web content:
-		$http = new Ptc_Http();
+		$http = new \ChipVN\Http();
 		$http->setTarget("http://www.yourwebsite.com/");
 		$http->execute();
 		print_r($http->getResponseHeaders());
 		echo $http->getResponseText();
 		
  	Submit form:
- 		$http = new C_Http();
+ 		$http = new \ChipVN\Http();
 		$http->setTarget("http://www.yourwebsite.com/");
 		$http->setParam(array("fieldname"=> $value)); 
 		$http->setMethod('POST');
@@ -69,7 +73,7 @@
 		echo $http->getResponseText();
 		
 	Using Proxy: only useCurl
-		$http = new C_Http();
+		$http = new \ChipVN\Http();
 		$http->setTarget("http://www.yourwebsite.com/");
 		$http->setProxy('proxy_ip:proxy_port');
 		$http->execute();
@@ -77,7 +81,7 @@
 	
 	Upload file:
 		$filePath = getcwd().'/abc.jpg';
-		$http = new C_Http();
+		$http = new \ChipVN\Http();
 		$http->setTarget("http://www.yourwebsite.com/");
 		$http->setSubmitMultipart();
 		$http->setParam(array('fileupload'=>"@$filePath"));
@@ -85,8 +89,9 @@
 		print_r($http->getResponseHeaders());
 		echo $http->getResponseText();
 */
+namespace ChipVN;
 
-class Ptc_Http
+class Http
 {
 	/**
 	 * Url target
@@ -282,7 +287,7 @@ class Ptc_Http
 	
 	/**
 	 * Reset request
-	 * @return Ptc_Http
+	 * @return \ChipVN\Http
 	*/
 	public function reset()
 	{
@@ -324,7 +329,7 @@ class Ptc_Http
 	 * Set url target
 	 *
 	 * @param string
-	 * @return Ptc_Http
+	 * @return \ChipVN\Http
 	*/
 	public function setTarget($target)
 	{
@@ -337,7 +342,7 @@ class Ptc_Http
 	 *
 	 * @param	string|array	
 	 * @param	mixed
-	 * @return Ptc_Http
+	 * @return \ChipVN\Http
 	*/
 	public function setParam($name, $value = NULL)
 	{
@@ -364,7 +369,7 @@ class Ptc_Http
 	/**
 	 * Set referer
 	 * @param	string
-	 * @return	Ptc_Http
+	 * @return	\ChipVN\Http
 	*/
 	public function setReferer($referer)
 	{
@@ -377,7 +382,7 @@ class Ptc_Http
 	 * Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0
 	 *
 	 * @param string
-	 * @return Ptc_Http
+	 * @return \ChipVN\Http
 	*/
 	public function setUserAgent($userAgent)
     {
@@ -389,7 +394,7 @@ class Ptc_Http
 	 * Set number of seconds to time out
 	 *
 	 * @param integer seconds to time out
-	 * @return Ptc_Http
+	 * @return \ChipVN\Http
 	*/
 	public function setTimeout($seconds)
     {
@@ -402,7 +407,7 @@ class Ptc_Http
 	
 	/**
 	 * @param	string
-	 * @return	Ptc_Http
+	 * @return	\ChipVN\Http
 	*/
 	public function setRawPost($rawPost)
 	{
@@ -414,7 +419,7 @@ class Ptc_Http
 	 * Request method
 	 *
 	 * @param	string
-	 * @return	Ptc_Http
+	 * @return	\ChipVN\Http
 	*/
 	public function setMethod($method)
     {
@@ -427,7 +432,7 @@ class Ptc_Http
 	 * 
 	 * @param	string|array
 	 * @param	mixed
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setHeader($name, $value = NULL)
 	{
@@ -457,7 +462,7 @@ class Ptc_Http
 	 * Use cURL for sending request, otherwise use fsockopen
 	 *
 	 * @param boolean
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function useCurl($useCurl)
 	{
@@ -466,7 +471,7 @@ class Ptc_Http
 	}
 	
 	/**
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setSubmitMultipart($type = 'form-data') 
 	{
@@ -476,7 +481,7 @@ class Ptc_Http
 		return $this;
 	}
 	/**
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setSubmitNormal($method = 'POST')
 	{
@@ -489,7 +494,7 @@ class Ptc_Http
 	/**
 	 * 
 	 * @param string
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setMimeContentType($mimeType)
 	{
@@ -502,7 +507,7 @@ class Ptc_Http
 	 *
 	 * @param	string|array
 	 * @param	boolean	addition to existing cookie ?
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setCookie($value, $addition = true)
 	{
@@ -520,7 +525,7 @@ class Ptc_Http
 	
 	/**
 	 * Set proxy
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setProxy($proxyIp, $username = '', $password = '')
 	{
@@ -533,7 +538,7 @@ class Ptc_Http
 	
 	/**
 	 * Set auth
-	 * @return 	Ptc_Http
+	 * @return 	\ChipVN\Http
 	*/
 	public function setAuth($username, $password = '')
 	{
@@ -582,9 +587,6 @@ class Ptc_Http
             $this->host = $urlParsed['host'];
             $this->port = ($this->port != 0) ? $this->port : 80;
         }
-		if( ! empty($urlParsed['port'])) {
-			$this->port = $urlParsed['port'];
-		}
         $this->path   = (isset($urlParsed['path']) ? $urlParsed['path'] : '/') . (isset($urlParsed['query']) ? '?' . $urlParsed['query'] : '');
         $this->schema = $urlParsed['scheme'];
 		
@@ -594,7 +596,7 @@ class Ptc_Http
 			if($this->isMultipart) {
 				foreach((array)$this->params as $key => $value) {
 					if(substr($value, 0, 1) == '@') {
-						$this->params[$key] = $value . ';type=' . self::mimeType(substr($value, 1));
+						$this->params[$key] = $value . ';type=' . $this->_getMimeType(substr($value, 1));
 					}
 				}
 			}
@@ -678,9 +680,9 @@ class Ptc_Http
 						if(file_exists($upload_file_path)) {
 							$postData 	.= "--" . $this->boundary . "\r\n";
 							$postData  	.= "Content-disposition: form-data; name=\"" . $upload_field_name . "\"; filename=\"" . basename($upload_file_path) . "\"\r\n";
-							$postData	.= "Content-Type: " . self::mimeType($upload_file_path) . "\r\n";
+							$postData	.= "Content-Type: " . $this->_getMimeType($upload_file_path) . "\r\n";
 							$postData	.= "Content-Transfer-Encoding: binary\r\n\r\n";
-							$postData	.= self::readBinary($upload_file_path) . "\r\n";
+							$postData	.= $this->_readBinary($upload_file_path) . "\r\n";
 						}			
 					}
 					else {
@@ -873,7 +875,7 @@ class Ptc_Http
 	 *
 	 * @return	string
 	*/
-	public static function readBinary($filePath)
+    protected function _readBinary($filePath)
 	{
 		$binarydata = '';
 		if(file_exists($filePath)) {
@@ -892,7 +894,7 @@ class Ptc_Http
 	 * @param	string	file path
 	 * @return	string|boolean FALSE if mime type not found
 	*/
-	public static function mimeType($filePath)
+	protected function _getMimeType($filePath)
 	{
 		$filename = realpath($filePath);
 		$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));

@@ -1,23 +1,51 @@
 <?php
+/** 
+ * ChipVN Library
+ * 
+ * @package		ChipVN
+ * @author		Phan Thanh Cong <ptcong90 at gmail dot com>
+ * @copright	chiplove.9xpro aka ptcong90
+ * @version		2.0
+ * @release		Jul 25, 2013
+*/
+namespace ChipVN;
 
-class Ptc_Loader
+class Loader
 {
+	/**
+	 * Load class name without ChipVN prefix and .php extension
+	 * 
+	 * @param string class name
+	 * @return void
+	 * @throws Exception if file is not exist.
+	*/
 	public static function load($class)
 	{
-		$file = strtr($class, '_', DIRECTORY_SEPARATOR) . '.php';
-		$file = __DIR__ . DIRECTORY_SEPARATOR . $file;
+		$file = dirname(__FILE__) . strtr($class, array(
+			'ChipVN' 	=> '',
+            '\\'        => '/',
+			'_' 		=> DIRECTORY_SEPARATOR,
+			'.php'		=> '',
+		)) . '.php';
+		
+        if( ! is_file($file)) {
+            throw new Exception(':method: File ":file" not found', array(
+				':method' 	=> __METHOD__,
+				':file' 	=> $file
+			));
+		}
 		require_once $file;
 	}
 	
 	public static function registerAutoLoad()
 	{
-		spl_autoload_register(array('Ptc_Loader', 'autoLoad'));
+		spl_autoload_register(array(__CLASS__, 'autoLoad'));
 	}
 	
 	public static function autoLoad($class)
 	{
-		if(substr($class, 0, 4) === 'Ptc_') {
-			self::load(substr($class, 4));
+        if(strpos($class, 'ChipVN') === 0) {
+			self::load($class);
 		}
 	}
 }
