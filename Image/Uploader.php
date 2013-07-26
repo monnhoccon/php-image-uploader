@@ -5,7 +5,7 @@
  * @package		ChipVN
  * @author		Phan Thanh Cong <ptcong90 at gmail dot com>
  * @copright	chiplove.9xpro aka ptcong90
- * @version		4.0
+ * @version		2.0
  * @release		Jul 25, 2013
 */
 namespace ChipVN;
@@ -26,10 +26,13 @@ class Image_Uploader
         //ini_set('display_errors', 1);
         
 		$pluginName = empty($pluginName) ? 'Local' : 'Remote_' . ucfirst($pluginName);
-		
-		$className = __CLASS__ . '\\' . $pluginName;	
         
-		Loader::load($className);	
+        // load remote
+		if(strpos($pluginName, 'Remote') === 0 AND !class_exists('\ChipVN\Image_Uploader\Remote')) {
+            Loader::load($className = __CLASS__ . '\Remote');	
+        }
+		$className = __CLASS__ . '\\' . $pluginName;
+        Loader::load($className);	
         
 		return new $className;
 	}

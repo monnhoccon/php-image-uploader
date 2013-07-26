@@ -5,7 +5,7 @@
  * @package		ChipVN
  * @author		Phan Thanh Cong <ptcong90 at gmail dot com>
  * @copright	chiplove.9xpro aka ptcong90
- * @version		4.0
+ * @version		2.0 
  * @release		Jul 25, 2013
 */
 namespace ChipVN\Image_Uploader;
@@ -23,6 +23,9 @@ abstract class Remote
         // need to use SESSION to save cookie logged in
         if( ! session_id()) {
             session_start();
+        }
+        if( ! class_exists('\ChipVN\Http')) {
+            \ChipVN\Loader::load('Http');	
         }
         $this->http = new \ChipVN\Http;		
 	}

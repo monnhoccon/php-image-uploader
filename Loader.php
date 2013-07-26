@@ -21,7 +21,9 @@ class Loader
 	*/
 	public static function load($class)
 	{
-		$file = dirname(__FILE__) . strtr($class, array(
+        echo $class.'<br />';
+        
+        $file = dirname(__FILE__) . DIRECTORY_SEPARATOR . strtr($class, array(
 			'ChipVN' 	=> '',
             '\\'        => '/',
 			'_' 		=> DIRECTORY_SEPARATOR,
@@ -29,6 +31,9 @@ class Loader
 		)) . '.php';
 		
         if( ! is_file($file)) {
+            if( ! class_exists('\ChipVN\Exception')) {
+                require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Exception.php';
+            }
             throw new Exception(':method: File ":file" not found', array(
 				':method' 	=> __METHOD__,
 				':file' 	=> $file
