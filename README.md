@@ -10,6 +10,7 @@ This project mainly help to upload an image to some services like Picasa, Images
 #### Version 2.0: Jul 25, 2013
 * Use namespace
 * Rewrite all plugins to clear 
+
 #### Version 1.0: June 17, 2010
 * Upload image to Imageshack, Picasa
 
