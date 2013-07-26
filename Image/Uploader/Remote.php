@@ -116,7 +116,7 @@ abstract class Remote
 		return $this->_doTransload();
 	}
 	
-    protected function getKeyForSession($key)
+    protected function _getKeyForSession($key)
     {
         return $this->_getPluginName() . $this->_username . $key;
     }
@@ -128,7 +128,7 @@ abstract class Remote
      */
     public function set($key, $value)
     {
-        $key = $this->getKeyForSession($key);
+        $key = $this->_getKeyForSession($key);
         $_SESSION[$key] = $value;
     }
     
@@ -140,7 +140,7 @@ abstract class Remote
      */
     public function get($key)
     {
-        $key = $this->getKeyForSession($key);
+        $key = $this->_getKeyForSession($key);
         if(isset($_SESSION[$key])) {
             return $_SESSION[$key];
         }
