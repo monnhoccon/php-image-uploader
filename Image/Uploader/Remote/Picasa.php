@@ -95,7 +95,7 @@ class Remote_Picasa extends Remote
 	*/
 	public function setAlbumId($albumIds)
 	{
-		$this->_albumId = is_array($albumId) ? $albumIds[array_rand($albumIds, 1)] : $albumIds;
+		$this->_albumId = is_array($albumIds) ? $albumIds[array_rand($albumIds, 1)] : $albumIds;
 	}
     
     protected function _doUpload()
