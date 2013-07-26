@@ -21,8 +21,6 @@ class Loader
 	*/
 	public static function load($class)
 	{
-        echo $class.'<br />';
-        
         $file = dirname(__FILE__) . DIRECTORY_SEPARATOR . strtr($class, array(
 			'ChipVN' 	=> '',
             '\\'        => '/',
