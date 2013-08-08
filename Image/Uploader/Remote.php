@@ -163,8 +163,8 @@ abstract class Remote
      */
     protected function _throwHttpError($method)
     {
-        throw new \ChipVN\Exception(':method: ' . implode('; ', $this->http->errors), array(
-    ':method' => $method
+		$this->_throwException(':method: ' . implode('; ', $this->http->errors), array(
+    		':method' => $method
         ));
     }
 
@@ -176,6 +176,9 @@ abstract class Remote
      */
     protected function _throwException($message, $param = array())
     {
+		if (!class_exists('\ChipVN\Exception', FALSE)) {
+            \ChipVN\Loader::load('Exception');
+        }
         throw new \ChipVN\Exception($message, $param);
     }
 
