@@ -48,7 +48,7 @@ To create new AlbumId faster, you may use echo `$uploader->addAlbum('testing 1')
     echo $uploader->upload(getcwd(). '/a.jpg');
     echo $uploader->transload('http://img33.imageshack.us/img33/6840/wz7u.jpg');
 
-### Upload to Imageshack
+### Upload to Imgur
     $uploader = \ChipVN\Image_Uploader::factory('Imgur');
     // you may upload with anonymous account but may be the image will be deleted after a period of time
     // $uploader->login('your account here', 'your password here');
