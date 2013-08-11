@@ -11,6 +11,8 @@
  */
 
 namespace ChipVN\Image_Uploader;
+use ChipVN\Loader;
+use ChipVN\Exception;
 
 class Local
 {
@@ -88,9 +90,9 @@ class Local
     protected function _throwException($message, $param = array())
     {
 		if (!class_exists('\ChipVN\Exception', FALSE)) {
-            \ChipVN\Loader::load('Exception');
+            Loader::load('Exception');
         }
-        throw new \ChipVN\Exception($message, $param);
+        throw new Exception($message, $param);
     }
 
 }

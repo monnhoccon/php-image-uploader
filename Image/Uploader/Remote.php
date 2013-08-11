@@ -11,6 +11,9 @@
  */
 
 namespace ChipVN\Image_Uploader;
+use ChipVN\Loader;
+use ChipVN\Http;
+use ChipVN\Exception;
 
 abstract class Remote
 {
@@ -28,9 +31,9 @@ abstract class Remote
             session_start();
         }
         if (!class_exists('\ChipVN\Http', FALSE)) {
-            \ChipVN\Loader::load('Http');
+            Loader::load('Http');
         }
-        $this->http = new \ChipVN\Http;
+        $this->http = new Http;
     }
 
     /**
@@ -177,9 +180,9 @@ abstract class Remote
     protected function _throwException($message, $param = array())
     {
 		if (!class_exists('\ChipVN\Exception', FALSE)) {
-            \ChipVN\Loader::load('Exception');
+            Loader::load('Exception');
         }
-        throw new \ChipVN\Exception($message, $param);
+        throw new Exception($message, $param);
     }
 
     /**
