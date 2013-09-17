@@ -30,20 +30,23 @@ class Remote_Imgur extends Remote
             ));
             if ($this->http->errors) {
                 $this->_throwHttpError(__METHOD__);
-            } else if ($this->http->getResponseStatus() == 302 OR stripos($this->http->getResponseCookie(), 'just_logged_in=1') OR (stripos($this->http->getResponseHeaders('location'), $this->_username))
+            }
+            else if ($this->http->getResponseStatus() == 302 OR stripos($this->http->getResponseCookie(), 'just_logged_in=1') OR (stripos($this->http->getResponseHeaders('location'), $this->_username))
             ) {
-                $arrayCookies = $this->http->getResponseHeaders('set-cookie');
-                // remove IMGURSESSION at the first, that is old or fake SESSION
-                array_shift($arrayCookies);
-                $this->set('cookieLogin', implode(';', $arrayCookies));
-            } else {
+				$cookie = $this->http->getResponseCookie();
+                if(substr_count($cookie, 'IMGURSESSION=') == 2) {
+					$cookie = preg_replace('#IMGURSESSION=([^;]+);#i', '', $cookie, 1);
+				}
+                $this->set('cookieLogin', $cookie);
+            }
+            else {
                 $this->set('cookieLogin', NULL);
                 $this->_throwException(':method: Login failed. Please check your username/password again. :res', array(
                     ':method' => __METHOD__,
                     ':res' => $this->http->getResponseText()
                 ));
             }
-        }
+       	}
         return TRUE;
     }
 
@@ -65,7 +68,8 @@ class Remote_Imgur extends Remote
 
         if ($this->http->errors) {
             $this->_throwHttpError(__METHOD__);
-        } else if (isset($result['error'])) {
+        }
+        else if (isset($result['error'])) {
             $this->_throwException(':method: :error', array(
                 ':method' => __METHOD__,
                 ':error' => $result['error']['message']
@@ -89,7 +93,8 @@ class Remote_Imgur extends Remote
         $result = json_decode($this->http->getResponseText(), TRUE);
         if ($this->http->errors) {
             $this->_throwHttpError(__METHOD__);
-        } else if (strpos($this->http->getResponseHeaders('location'), 'error')) {
+        }
+        else if (strpos($this->http->getResponseHeaders('location'), 'error')) {
             $this->_throwException(':method: Image format not supported, or image is corrupt.', array(
                 ':method' => __METHOD__
             ));
@@ -127,9 +132,11 @@ class Remote_Imgur extends Remote
         $result = json_decode($this->http->getResponseText(), TRUE);
         if ($this->http->errors) {
             $this->_throwHttpError(__METHOD__);
-        } else if (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
+        }
+        else if (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
             return 'http://i.imgur.com/' . $result['data']['hash'] . $this->_getExtensionFormImage($this->_imagePath);
-        } else {
+        }
+        else {
             $this->_throwException(':method: Free upload failed.', array(
                 ':method' => __METHOD__
             ));
@@ -165,9 +172,11 @@ class Remote_Imgur extends Remote
         $result = json_decode($this->http->getResponseText(), TRUE);
         if ($this->http->errors) {
             $this->_throwHttpError(__METHOD__);
-        } else if (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
+        }
+        else if (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
             return 'http://i.imgur.com/' . $result['data']['hash'] . $this->_getExtensionFormImage($this->_imageUrl);
-        } else {
+        }
+        else {
             $this->_throwException(':method: Free transload failed.', array(
                 ':method' => __METHOD__
             ));
@@ -224,10 +233,12 @@ class Remote_Imgur extends Remote
             $result = json_decode($this->http->getResponseText(), TRUE);
             if ($this->http->errors) {
                 $this->_throwHttpError(__METHOD__);
-            } else if (isset($result['sid'])) {
+            }
+            else if (isset($result['sid'])) {
                 $this->set('freeSID', $result['sid']);
                 $this->set('cookieFreeSID', $this->http->getResponseCookie());
-            } else {
+            }
+            else {
                 $this->_throwException(':method: Cannot get free IMGURSESSION.', array(
                     ':method' => __METHOD__
                 ));
