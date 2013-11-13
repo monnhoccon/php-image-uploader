@@ -1,5 +1,5 @@
 # PHP-Image-Uploader
-This project mainly help to upload an image to some services like Picasa, Imageshack, Imgur or something (just a plugin)
+This project mainly help to upload images to some services like Picasa, Imageshack, Imgur or something (just a plugin)
 * Author: Phan Thanh Cong 
 * Contact: ptcong90@gmail.com
 * Copyright: (c) 2010 chiplove.9xpro
@@ -7,8 +7,13 @@ This project mainly help to upload an image to some services like Picasa, Images
 
 ***
 ## Change Logs
+
+#### Version 4.0.1: Sep, 2013
+* Fix Imgur auth
+
 #### Version 4.0: Jul 25, 2013
 * Use namespace
+* Require PHP 5.3 or later
 * Rewrite all plugins to clear 
 
 #### Version 1.0: June 17, 2010
