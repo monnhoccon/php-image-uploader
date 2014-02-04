@@ -4,6 +4,7 @@ This project mainly help to upload images to some services like Picasa, Imagesha
 * Contact: ptcong90@gmail.com
 * Copyright: (c) 2010 chiplove.9xpro
 * Version: 4.0
+* License: MIT
 
 ***
 ## Change Logs
