@@ -34,7 +34,7 @@ This project mainly help to upload images to some services like Picasa, Imagesha
 
 ## Usage
 ###### If you use composer
-Add require `"ptcong/php-image-uploader": "5.*@dev"` to _composer.json_ and run `composer update` 
+Add require `"ptcong/php-image-uploader": "5.0.*@dev"` to _composer.json_ and run `composer update` 
 
 ###### If you don't use composer
 Download `\ChipVN\Http\Request` from https://github.com/ptcong/php-http-class and put it to `ChipVN/Http` folder, then include two files:
