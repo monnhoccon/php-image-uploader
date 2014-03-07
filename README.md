@@ -19,8 +19,7 @@ This project mainly help to upload images to some services like Picasa, Imagesha
 * Fix Imgur auth
 
 #### Version 4.0: Jul 25, 2013
-* Use namespace
-* Require PHP 5.3 or later
+* Require PHP 5.3 or newer
 * Rewrite all plugins to clear 
 
 #### Version 1.0: June 17, 2010
