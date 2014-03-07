@@ -1,4 +1,5 @@
 {
+    "minimum-stability" : "dev",
     "name": "ptcong/php-image-uploader",
     "description": "Library for uploading image to picasa, imageshack, imgur, etc...",
     "keywords": ["php", "http", "image-uploader", "remote-upload"],
