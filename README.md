@@ -1,13 +1,19 @@
 # PHP-Image-Uploader
 This project mainly help to upload images to some services like Picasa, Imageshack, Imgur or something (just a plugin)
-* Author: Phan Thanh Cong 
-* Contact: ptcong90@gmail.com
-* Copyright: (c) 2010 chiplove.9xpro
-* Version: 4.0
-* License: MIT
 
-***
+* Author:     Phan Thanh Cong <ptcong90@gmail.com>
+* Copyright:  2010-2014 Phan Thanh Cong.
+* License:    http://www.opensource.org/licenses/mit-license.php  MIT License
+* Version:    5.0 stateble
+
 ## Change Logs
+#### Version 5.0: Mar 07, 2014
+* Supports composer
+* Change factory method from `\ChipVN\Image_Uploader::factory` to `\ChipVN\ImageUploader\ImageUploader::make`
+* Make it simpler (only 5 php files)
+* Remove ~~upload to local server~~
+* Update Imageshack plugin
+
 
 #### Version 4.0.1: Sep, 2013
 * Fix Imgur auth
@@ -20,18 +26,21 @@ This project mainly help to upload images to some services like Picasa, Imagesha
 #### Version 1.0: June 17, 2010
 * Upload image to Imageshack, Picasa
 
-***
 ## Features
-* Upload image to local server
+* ~~Upload image to local server~~
 * Upload image to remote service like (picasa, imageshack, imgur)
 * Remote: can free upload to imgur, imageshack or upload to your account. Picasa must be login to upload
 * Easy to make new plugin for uploading to another service
 
 ## Usage
-The first
+###### If you use composer
+Add require `"ptcong/php-image-uploader": "5.*@dev"` to _composer.json_ and run `composer update` 
 
-    include 'ChipVN/Loader.php';
-    \ChipVN\Loader::registerAutoLoad();
+###### If you don't use composer
+Download `\ChipVN\Http\Request` from https://github.com/ptcong/php-http-class and put it to `ChipVN/Http` folder, then include two files:
+    
+    include 'ChipVN/Http/Request.php';
+    include 'ChipVN/ImageUploader/ImageUploader.php';
 
 
 then 
@@ -39,7 +48,7 @@ then
 To upload image to Picasa, you need to have some AlbumIds otherwise the image will be uploaded to _default_ album.
 To create new AlbumId faster, you may use echo `$uploader->addAlbum('testing 1');`
 
-    $uploader = \ChipVN\Image_Uploader::factory('Picasa');
+    $uploader = \ChipVN\ImageUploader\ImageUploader::make('Picasa');
     $uploader->login('your account here', 'your password here');
     // you can set upload to an albumId by array of albums or an album, system will get a random album to upload 
     //$uploader->setAlbumId(array('51652569125195125', '515124156195725'));
@@ -48,24 +57,17 @@ To create new AlbumId faster, you may use echo `$uploader->addAlbum('testing 1')
     // this plugin does not support transload image
 
 ### Upload to Imageshack
-    $uploader = \ChipVN\Image_Uploader::factory('Imageshack');
-    // you may upload with anonymous account but may be the image will be deleted after a period of time
-    // $uploader->login('your account here', 'your password here');
+
+    $uploader = \ChipVN\ImageUploader\ImageUploader::make('Imageshack');
+    $uploader->login('your account here', 'your password here');
+    $uploader->setApi('your api here');
     echo $uploader->upload(getcwd(). '/a.jpg');
     echo $uploader->transload('http://img33.imageshack.us/img33/6840/wz7u.jpg');
 
 ### Upload to Imgur
-    $uploader = \ChipVN\Image_Uploader::factory('Imgur');
+
+    $uploader = \ChipVN\ImageUploader\ImageUploader::make('Imgur');
     // you may upload with anonymous account but may be the image will be deleted after a period of time
     // $uploader->login('your account here', 'your password here');
     echo $uploader->upload(getcwd(). '/a.jpg');
     echo $uploader->transload('http://img33.imageshack.us/img33/6840/wz7u.jpg');
-
-
-### Upload to Local server
-    // This plugin to upload file that was submited from client
-    $uploader = \ChipVN\Image_Uploader::factory();
-    echo $uploader->upload($_FILES['uploadfile'], $destination);
-
-***
-The end

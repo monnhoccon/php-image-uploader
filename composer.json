@@ -1,0 +1,23 @@
+{
+    "name": "ptcong/php-image-uploader",
+    "description": "Library for uploading image to picasa, imageshack, imgur, etc...",
+    "keywords": ["php", "http", "image-uploader", "remote-upload"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Phan Thanh Cong",
+            "email": "ptcong90@gmail.com",
+            "homepage": "http://ptcong.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ptcong/php-http-class": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { 
+            "ChipVN\\ImageUploader": "" 
+        }
+    },
+    "target-dir": "ChipVN/ImageUploader"
+}
