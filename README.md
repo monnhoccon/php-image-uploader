@@ -1,5 +1,5 @@
 # PHP-Image-Uploader
-This project mainly help to upload images to some services like Picasa, Imageshack, Imgur or something (just a plugin)
+This project mainly help to upload images to some hosting services like Picasa, Imageshack, Imgur
 
 * Author:     Phan Thanh Cong <ptcong90@gmail.com>
 * Copyright:  2010-2014 Phan Thanh Cong.
