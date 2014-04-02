@@ -16,9 +16,7 @@
         "ptcong/php-http-class": "2.5.*@dev"
     },
     "autoload": {
-        "psr-0": { 
-            "ChipVN\\ImageUploader": "" 
-        }
+        "classmap": ["ChipVN/ImageUploader"]
     },
     "target-dir": "ChipVN/ImageUploader"
 }
