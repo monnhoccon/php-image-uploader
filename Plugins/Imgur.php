@@ -21,14 +21,10 @@ class ChipVN_ImageUploader_Plugins_Imgur extends ChipVN_ImageUploader_Plugins_Ab
             $this->checkRequestErrors(__METHOD__);
 
             if ($this->request->getResponseStatus() == 302
-                || stripos($this->request->getResponseCookie(), 'just_logged_in=1')
+                || $this->request->getResponseArrayCookies('just_logged_in') == 1
                 || (stripos($this->request->getResponseHeaders('location'), $this->username))
             ) {
-                $cookie = $this->request->getResponseCookie();
-                if (substr_count($cookie, 'IMGURSESSION=') == 2) {
-                    $cookie = preg_replace('#IMGURSESSION=([^;]+);#i', '', $cookie, 1);
-                }
-                $this->set('sessionLogin', $cookie);
+                $this->set('sessionLogin', $this->request->getResponseArrayCookies());
 
             } else {
                 $this->throwException(sprintf('%s: Login failed. %s', __METHOD__, $this->request->getResponseText()));
@@ -224,7 +220,7 @@ class ChipVN_ImageUploader_Plugins_Imgur extends ChipVN_ImageUploader_Plugins_Ab
 
             if (isset($result['sid'])) {
                 $this->set('freeSID', $result['sid']);
-                $this->set('cookieFreeSID', $this->request->getResponseCookie());
+                $this->set('cookieFreeSID', $this->request->getResponseCookies());
             } else {
                 $this->throwException(sprintf('%s: Cannot get free IMGURSESSION.', __METHOD__));
             }
