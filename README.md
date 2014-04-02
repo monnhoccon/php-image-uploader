@@ -9,7 +9,7 @@ This project mainly help to upload images to some hosting services like Picasa, 
 ## Change Logs
 
 ##### Version 5.0.1: Apr 2, 2014
-* Change class name from `ChipVN_ImageUploader_ImageUploader` to `ChipVN_ImageUploader_ImageUploader`
+* Change class name from `\ChipVN\ImageUploader\ImageUploader` to `ChipVN_ImageUploader_ImageUploader`
 * Support PHP >= 5 (does not require >= 5.3)
 
 ##### Version 5.0: Mar 07, 2014
