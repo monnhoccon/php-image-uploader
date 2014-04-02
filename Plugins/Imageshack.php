@@ -7,11 +7,7 @@
  * @update Mar 07, 2014
  */
 
-namespace ChipVN\ImageUploader\Plugins;
-
-use ChipVN\ImageUploader\Plugin;
-
-class Imageshack extends Plugin
+class ChipVN_ImageUploader_Plugins_Imageshack extends ChipVN_ImageUploader_Plugins_Abstract
 {
     /**
      * API endpoint URL.
@@ -41,16 +37,16 @@ class Imageshack extends Plugin
             $this->request->reset();
             $this->request->setReferer('https://imageshack.com/');
             $this->request->execute($this->getApiURL('user/login'), 'POST', array(
-                'username' => $this->username,
-                'password' => $this->password,
+                'username'    => $this->username,
+                'password'    => $this->password,
                 'remember_me' => 'true',
                 'set_cookies' => 'true',
             ));
             $result = json_decode($this->request->getResponseText(), true);
-            if ($this->request->errors) {
-                $this->throwHttpError(__METHOD__);
 
-            } elseif (!empty($result['result']['userid'])) {
+            $this->checkRequestErrors(__METHOD__);
+
+            if (!empty($result['result']['userid'])) {
                 $this->set('sessionLogin', $result['result']);
 
             } else {
@@ -97,24 +93,23 @@ class Imageshack extends Plugin
             $this->throwException('You must be loggedin and have an API key. Register API here: https://imageshack.com/contact/api');
         }
 
-        $target = $this->getApiURL('images');
-        $apiKey = $this->apiKey;
+        $target  = $this->getApiURL('images');
+        $apiKey  = $this->apiKey;
         $session = $this->get('sessionLogin');
 
         $this->request->reset();
         $this->request->setSubmitMultipart();
-        $this->request->setParam($param + array(
+        $this->request->setParameters($param + array(
             'auth_token' => $session['auth_token'],
-            'api_key' => $apiKey,
+            'api_key'    => $apiKey,
         ));
         $this->request->execute($target, 'POST');
 
         $result = json_decode($this->request->getResponseText(), true);
 
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
+        $this->checkRequestErrors(__METHOD__);
 
-        } elseif (isset($result['error']['error_message'])) {
+        if (isset($result['error']['error_message'])) {
             $this->throwException(__METHOD__ . ': ' . $result['error']['error_message'] . $this->request->getResponseText());
 
         } elseif (isset($result['result']['images'][0]['direct_link'])) {
@@ -125,5 +120,7 @@ class Imageshack extends Plugin
 
             return $url;
         }
+
+        return false;
     }
 }

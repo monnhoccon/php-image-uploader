@@ -2,11 +2,8 @@
 /**
  * You may upload to your account or without account.
  */
-namespace ChipVN\ImageUploader\Plugins;
 
-use ChipVN\ImageUploader\Plugin;
-
-class Imgur extends Plugin
+class ChipVN_ImageUploader_Plugins_Imgur extends ChipVN_ImageUploader_Plugins_Abstract
 {
     /**
      * {@inheritdoc}
@@ -18,13 +15,12 @@ class Imgur extends Plugin
             $this->request->execute('https://imgur.com/signin', 'POST', array(
                 'username' => $this->username,
                 'password' => $this->password,
-                'submit' => '',
+                'submit'   => '',
             ));
 
-            if ($this->request->errors) {
-                $this->throwHttpError(__METHOD__);
+            $this->checkRequestErrors(__METHOD__);
 
-            } elseif ($this->request->getResponseStatus() == 302
+            if ($this->request->getResponseStatus() == 302
                 || stripos($this->request->getResponseCookie(), 'just_logged_in=1')
                 || (stripos($this->request->getResponseHeaders('location'), $this->username))
             ) {
@@ -53,17 +49,17 @@ class Imgur extends Plugin
 
         $this->request->reset();
         $this->request->setSubmitMultipart();
-        $this->request->setCookie($this->get('sessionLogin'));
-        $this->request->setParam(array(
-            'key' => $this->apiKey,
+        $this->request->setCookies($this->get('sessionLogin'));
+        $this->request->setParameters(array(
+            'key'   => $this->apiKey,
             'image' => '@' . $this->file,
         ));
         $this->request->execute('http://api.imgur.com/2/upload.json', 'POST');
         $result = json_decode($this->request->getResponseText(), true);
 
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        } elseif (isset($result['error'])) {
+        $this->checkRequestErrors(__METHOD__);
+
+        if (isset($result['error'])) {
             $this->throwException(sprintf('%s: %s', __METHOD__ , $result['error']['message']));
         }
 
@@ -80,15 +76,16 @@ class Imgur extends Plugin
         }
 
         $this->request->reset();
-        $this->request->setCookie($this->get('sessionLogin'));
-        $this->request->setParam(array(
+        $this->request->setCookies($this->get('sessionLogin'));
+        $this->request->setParameters(array(
             'url' => $this->url,
         ));
         $this->request->execute('http://imgur.com/upload', 'POST');
         $result = json_decode($this->request->getResponseText(), true);
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        } elseif (strpos($this->request->getResponseHeaders('location'), 'error')) {
+
+        $this->checkRequestErrors(__METHOD__);
+
+        if (strpos($this->request->getResponseHeaders('location'), 'error')) {
             $this->throwException(sprintf('%s: Image format not supported, or image is corrupt.', __METHOD__));
         }
 
@@ -107,30 +104,32 @@ class Imgur extends Plugin
 
         $this->request->reset();
         $this->request->setSubmitMultipart();
-        $this->request->setHeader(array(
+        $this->request->setHeaders(array(
             'X-Requested-With' => 'XMLHttpRequest',
-            'Referer' => 'http://imgur.com/',
+            'Referer'          => 'http://imgur.com/',
         ));
-        $this->request->setCookie($this->get('cookieFreeSID'));
-        $this->request->setParam(array(
+        $this->request->setCookies($this->get('cookieFreeSID'));
+        $this->request->setParameters(array(
             'current_upload' => 1,
-            'total_uploads' => 1,
-            'terms' => 0,
-            'album_title' => __CLASS__,
-            'gallery_title' => __CLASS__,
-            'sid' => $this->get('freeSID'),
-            'Filedata' => '@' . $this->file,
+            'total_uploads'  => 1,
+            'terms'          => 0,
+            'album_title'    => __CLASS__,
+            'gallery_title'  => __CLASS__,
+            'sid'            => $this->get('freeSID'),
+            'Filedata'       => '@' . $this->file,
         ));
         $this->request->execute('http://imgur.com/upload', 'POST');
         $result = json_decode($this->request->getResponseText(), true);
 
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        } elseif (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
+        $this->checkRequestErrors(__METHOD__);
+
+        if (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
             return 'http://i.imgur.com/' . $result['data']['hash'] . $this->getExtensionFormImage($this->file);
         } else {
             $this->throwException(sprintf('%s: Free upload failed.', __METHOD__));
         }
+
+        return false;
     }
 
     /**
@@ -144,29 +143,32 @@ class Imgur extends Plugin
         $this->getFreeSID();
 
         $this->request->reset();
-        $this->request->setHeader(array(
+        $this->request->setHeaders(array(
             'X-Requested-With' => 'XMLHttpRequest',
-            'Referer' => 'http://imgur.com/',
+            'Referer'          => 'http://imgur.com/',
         ));
-        $this->request->setCookie($this->get('cookieFreeSID'));
-        $this->request->setParam(array(
+        $this->request->setCookies($this->get('cookieFreeSID'));
+        $this->request->setParameters(array(
             'current_upload' => 1,
-            'total_uploads' => 1,
-            'terms' => 0,
-            'album_title' => __CLASS__,
-            'gallery_title' => __CLASS__,
-            'sid' => $this->get('freeSID'),
-            'url' => $this->url,
+            'total_uploads'  => 1,
+            'terms'          => 0,
+            'album_title'    => __CLASS__,
+            'gallery_title'  => __CLASS__,
+            'sid'            => $this->get('freeSID'),
+            'url'            => $this->url,
         ));
         $this->request->execute('http://imgur.com/upload', 'POST');
         $result = json_decode($this->request->getResponseText(), true);
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        } elseif (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
+
+        $this->checkRequestErrors(__METHOD__);
+
+        if (isset($result['data']['hash']) AND isset($result['success']) AND $result['success']) {
             return 'http://i.imgur.com/' . $result['data']['hash'] . $this->getExtensionFormImage($this->url);
         } else {
             $this->throwException(sprintf('%s: Free transload failed.', __METHOD__));
         }
+
+        return false;
     }
 
     /**
@@ -218,9 +220,9 @@ class Imgur extends Plugin
             $this->request->execute('http://imgur.com/upload/start_session');
             $result = json_decode($this->request->getResponseText(), true);
 
-            if ($this->request->errors) {
-                $this->throwHttpError(__METHOD__);
-            } elseif (isset($result['sid'])) {
+            $this->checkRequestErrors(__METHOD__);
+
+            if (isset($result['sid'])) {
                 $this->set('freeSID', $result['sid']);
                 $this->set('cookieFreeSID', $this->request->getResponseCookie());
             } else {

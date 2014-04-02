@@ -1,11 +1,6 @@
 <?php
 
-namespace ChipVN\ImageUploader;
-
-use ChipVN\Http\Request;
-use Exception;
-
-abstract class Plugin
+abstract class ChipVN_ImageUploader_Plugins_Abstract
 {
     /**
      * Username to login hosting service.
@@ -66,7 +61,7 @@ abstract class Plugin
             session_start();
         }
 
-        $this->request = new Request;
+        $this->request = new ChipVN_Http_Request;
         $this->request->useCurl(false);
     }
 
@@ -155,7 +150,7 @@ abstract class Plugin
      */
     final public function getPluginName()
     {
-        return get_called_class();
+        return get_class($this);
     }
 
     /**
@@ -240,12 +235,25 @@ abstract class Plugin
     }
 
     /**
+     * Check and throw http error if have.
+     *
+     * @param  string $method
+     * @return void
+     */
+    protected function checkRequestErrors($method)
+    {
+        if ($this->request->errors) {
+            $this->throwRequestError(__METHOD__);
+        }
+    }
+
+    /**
      * Throws an exception.
      *
      * @param  string     $method
      * @return \Exception
      */
-    protected function throwHttpError($method)
+    protected function throwRequestError($method)
     {
         return $this->throwException(sprintf('%s: %s', $method, implode(', ', $this->request->errors)));
     }

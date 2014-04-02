@@ -8,9 +8,8 @@
  * @version    2.2
  * @release    Mar 07, 2014
  */
-namespace ChipVN\ImageUploader;
 
-class ImageUploader
+class ChipVN_ImageUploader_ImageUploader
 {
     /**
      * Get a plugin instance.
@@ -19,7 +18,7 @@ class ImageUploader
      */
     public function getPlugin($name)
     {
-        $class = __NAMESPACE__ . '\Plugins\\' . $name;
+        $class = 'ChipVN_ImageUploader_Plugins_' . $name;
         if (!class_exists($class, false)) {
             $this->loadPlugin($name);
         }
@@ -35,7 +34,7 @@ class ImageUploader
      */
     public static function make($plugin)
     {
-        $instance = new static;
+        $instance = new self;
 
         return $instance->getPlugin($plugin);
     }
@@ -49,9 +48,10 @@ class ImageUploader
      */
     protected function loadPlugin($name)
     {
-        $pluginDir = __DIR__ . '/Plugins/';
-        require_once $pluginDir . '../Plugin.php';
+        $pluginDir = dirname(__FILE__) . '/Plugins/';
 
+        require_once $pluginDir . 'Abstract.php';
+        
         if (file_exists($file = $pluginDir . $name . '.php')) {
             require_once $file;
         } else {

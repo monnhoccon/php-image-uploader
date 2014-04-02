@@ -3,11 +3,8 @@
  * You must loggedin for uploading.
  * This plugin doesn't support transloading.
  */
-namespace ChipVN\ImageUploader\Plugins;
 
-use ChipVN\ImageUploader\Plugin;
-
-class Picasa extends Plugin
+class ChipVN_ImageUploader_Plugins_Picasa extends ChipVN_ImageUploader_Plugins_Abstract
 {
 
     /**
@@ -31,6 +28,9 @@ class Picasa extends Plugin
      */
     private $albumId = 'default';
 
+    /**
+     * {@inheritdoc}
+     */
     protected function doLogin()
     {
         // normalize username
@@ -38,7 +38,7 @@ class Picasa extends Plugin
 
         if (!$this->get('sessionLogin') OR $this->get('loginTime') + 300 < $_SERVER['REQUEST_TIME']) {
             $this->request->reset();
-            $this->request->setParam(array(
+            $this->request->setParameters(array(
                 'accountType'   => 'HOSTED_OR_GOOGLE',
                 'Email'         => $this->username,
                 'Passwd'        => $this->password,
@@ -47,10 +47,9 @@ class Picasa extends Plugin
             ));
             $this->request->execute('https://www.google.com/accounts/ClientLogin', 'POST');
 
-            if ($this->request->errors) {
-                $this->throwHttpError(__METHOD__);
+            $this->checkRequestErrors(__METHOD__);
 
-            } elseif (preg_match('#Auth=([a-z0-9_\-]+)#i', $this->request->getResponseText(), $match)) {
+            if (preg_match('#Auth=([a-z0-9_\-]+)#i', $this->request->getResponseText(), $match)) {
                 $this->set('sessionLogin', $match[1]);
                 $this->set('loginTime', $_SERVER['REQUEST_TIME']);
 
@@ -95,7 +94,7 @@ class Picasa extends Plugin
 
         $this->request->reset();
         $this->request->setSubmitMultipart('related');
-        $this->request->setHeader(array(
+        $this->request->setHeaders(array(
             "Authorization: GoogleLogin auth=" . $this->get('sessionLogin'),
             "MIME-Version: 1.0",
         ));
@@ -105,7 +104,7 @@ class Picasa extends Plugin
             <category scheme=\"http://schemas.google.com/g/2005#kind\" term=\"http://schemas.google.com/photos/2007#photo\"/>
             </entry>");
 
-        $this->request->setParam(array(
+        $this->request->setParameters(array(
             'data' => '@' . $this->file
         ));
         $this->request->execute(
@@ -114,9 +113,9 @@ class Picasa extends Plugin
 
         $result = json_decode($this->request->getResponseText(), true);
 
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        } elseif (
+        $this->checkRequestErrors(__METHOD__);
+
+        if (
             $this->request->getResponseStatus() != 201
             || empty($result['entry']['media$group']['media$content'][0])
         ) {
@@ -127,7 +126,7 @@ class Picasa extends Plugin
         extract($result['entry']['media$group']['media$content'][0]);
 
         $size = $this->size ?: max($width, $height);
-        $url = str_replace(basename($url), 's' . $size . '/' . basename($url), $url);
+        $url  = str_replace(basename($url), 's' . $size . '/' . basename($url), $url);
 
         return $url;
     }
@@ -153,7 +152,7 @@ class Picasa extends Plugin
         $this->checkPermission(__METHOD__);
 
         $this->request->reset();
-        $this->request->setHeader(array(
+        $this->request->setHeaders(array(
             "Authorization: GoogleLogin auth=" . $this->get('sessionLogin'),
             "MIME-Version: 1.0",
             "GData-Version: 3.0",
@@ -161,9 +160,7 @@ class Picasa extends Plugin
         ));
         $this->request->execute('https://picasaweb.google.com/data/entry/api/user/' . $this->username . '/albumid/' . $albumId, 'DELETE');
 
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        }
+        $this->checkRequestErrors(__METHOD__);
 
         return ($this->request->getResponseHeaders('status') == 200);
     }
@@ -183,7 +180,7 @@ class Picasa extends Plugin
         $this->checkPermission(__METHOD__);
 
         $this->request->reset();
-        $this->request->setHeader(array(
+        $this->request->setHeaders(array(
             "Authorization: GoogleLogin auth=" . $this->get('sessionLogin'),
             "MIME-Version: 1.0",
         ));
@@ -196,9 +193,8 @@ class Picasa extends Plugin
         </entry>");
         $this->request->execute('https://picasaweb.google.com/data/feed/api/user/' . $this->username, 'POST');
 
-        if ($this->request->errors) {
-            $this->throwHttpError(__METHOD__);
-        }
+        $this->checkRequestErrors(__METHOD__);
+
         if (preg_match('#<id>.+?albumid/(.+?)</id>#i', $this->request->getResponseText(), $match)) {
             return $match[1];
         }
