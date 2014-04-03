@@ -61,8 +61,18 @@ abstract class ChipVN_ImageUploader_Plugins_Abstract
             session_start();
         }
 
-        $this->request = new ChipVN_Http_Request;
+        $this->request = $this->createRequest();
         $this->request->useCurl(false);
+    }
+
+    /**
+     * Create new ChipVN_Http_Request instance
+     *
+     * @return ChipVN_Http_Request 
+     */
+    public function createRequest()
+    {
+        return new ChipVN_Http_Request;
     }
 
     /**
