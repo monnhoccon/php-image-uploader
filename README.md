@@ -6,6 +6,11 @@ This project mainly help to upload images to some hosting services like Picasa, 
 * License:    http://www.opensource.org/licenses/mit-license.php  MIT License
 * Version:    5.0 stateble
 
+### Demo
+- http://ptcong.com/imageshack5 (version 5.1 - no free)
+- Version 5.1 include user interface and Flickr plugin and more features is paid, you may contact me to get it.
+
+
 ## Change Logs
 
 ##### Version 5.0.1: Apr 2, 2014
