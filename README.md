@@ -7,7 +7,7 @@ This project mainly help to upload images to some hosting services like Picasa, 
 * Version:    5.0 stateble
 
 ### Demo
-- http://ptcong.com/imageshack5 (version 5.1 - no free)
+- http://ptcong.com/imageuploader5 (version 5.1 - no free)
 - Version 5.1 include user interface and Flickr plugin and more features is paid, you may contact me to get it.
 
 
